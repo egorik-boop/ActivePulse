@@ -1,0 +1,87 @@
+﻿<Page x:Class="ActivePulse.Forms.Pages.EmployeesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Сотрудники"
+      >
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Grid.Row="0" Text="Управление сотрудниками" 
+                   FontSize="20" FontWeight="Bold" Margin="10"/>
+
+        <!-- Панель управления -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
+            <Button x:Name="AddButton" Content="Добавить" Width="80" Margin="5"/>
+            <Button x:Name="EditButton" Content="Изменить" Width="80" Margin="5" IsEnabled="False"/>
+            <Button x:Name="DeleteButton" Content="Удалить" Width="80" Margin="5" IsEnabled="False"/>
+        </StackPanel>
+
+        <!-- Форма редактирования -->
+        <Border Grid.Row="2" x:Name="EditForm" BorderBrush="LightGray" BorderThickness="1" 
+                Margin="10" Padding="10" Visibility="Collapsed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Имя:" Margin="0,0,5,5"/>
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="FirstNameTextBox" Margin="0,0,5,5"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Фамилия:" Margin="0,0,5,5"/>
+                <TextBox Grid.Row="0" Grid.Column="3" x:Name="LastNameTextBox" Margin="0,0,0,5"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Отчество:" Margin="0,0,5,5"/>
+                <TextBox Grid.Row="1" Grid.Column="1" x:Name="PatronymicTextBox" Margin="0,0,5,5"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Дата рождения:" Margin="0,0,5,5"/>
+                <DatePicker Grid.Row="1" Grid.Column="3" x:Name="BirthDatePicker" Margin="0,0,0,5"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Телефон:" Margin="0,0,5,5"/>
+                <TextBox Grid.Row="2" Grid.Column="1" x:Name="PhoneTextBox" Margin="0,0,5,5"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="Пол:" Margin="0,0,5,5"/>
+                <ComboBox Grid.Row="2" Grid.Column="3" x:Name="GenderComboBox" Margin="0,0,0,5"/>
+
+                <StackPanel Grid.Row="3" Grid.ColumnSpan="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Сохранить" Width="80" Margin="5"/>
+                    <Button Content="Отмена" Width="80" Margin="5"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Таблица сотрудников -->
+        <DataGrid Grid.Row="3" x:Name="EmployeesGrid" Margin="10" 
+                 AutoGenerateColumns="False" IsReadOnly="True"
+                 >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding EmployeeId}" Width="Auto"/>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding Lastname}" Width="*"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding Firstname}" Width="*"/>
+                <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" Width="*"/>
+                <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDate, StringFormat=d}" Width="Auto"/>
+                <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="Auto"/>
+                <DataGridTextColumn Header="Пол" Binding="{Binding GenderNavigation.Gender}" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Page>

@@ -1,0 +1,377 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\2XUCompetitionCap.jpg" />
+    <None Remove="Images\2XUEliteGoggles.jpg" />
+    <None Remove="Images\2XUProFins.jpeg" />
+    <None Remove="Images\AdidasChampionsLeagueProBall.jpg" />
+    <None Remove="Images\AdidasCompetitionHeadgear.jpeg" />
+    <None Remove="Images\AdidasPredatorGloves.jpg" />
+    <None Remove="Images\AdidasProBoxingGloves.jpg" />
+    <None Remove="Images\AdidasXProShinguards.jpg" />
+    <None Remove="Images\ArcteryxAll-MountainHelmet.jpg" />
+    <None Remove="Images\ArcteryxFreerideGloves.jpg" />
+    <None Remove="Images\ArcteryxProSnowboard.jpg" />
+    <None Remove="Images\ArcteryxTriathlonBike.jpg" />
+    <None Remove="Images\ArcteryxTriFins.jfif" />
+    <None Remove="Images\ArenaPowerglassProGoggles.jpg" />
+    <None Remove="Images\ArtengoTB920Ball.jfif" />
+    <None Remove="Images\ArtengoTennisNet.jpg" />
+    <None Remove="Images\ArtengoTR990Racquet.jpg" />
+    <None Remove="Images\AsicsRunningProGPSWatch.jpg" />
+    <None Remove="Images\AsicsSpeedWalkerPoles.jpg" />
+    <None Remove="Images\AtomicBacklandSkis.jpeg" />
+    <None Remove="Images\AtomicCarbonPoles.jpg" />
+    <None Remove="Images\AtomicFreerideHelmet.jpg" />
+    <None Remove="Images\AtomicRaceHelmet.jpg" />
+    <None Remove="Images\AtomicRedsterS9Skis.png" />
+    <None Remove="Images\AtomicTouringPoles.jpeg" />
+    <None Remove="Images\BabolatPureDriveRacquet.jpg" />
+    <None Remove="Images\BlackDiamondCamalotC4.png" />
+    <None Remove="Images\BlackDiamondTrailProPoles.jpg" />
+    <None Remove="Images\CallawayGolfStandBag.jpg" />
+    <None Remove="Images\CraftAeroHelmet.jpg" />
+    <None Remove="Images\CraftCarbonRoadBike.jpg" />
+    <None Remove="Images\CraftPerformanceGloves.jpg" />
+    <None Remove="Images\DunlopFortClubNet.jpg" />
+    <None Remove="Images\EdelridMegaJulBelayDevice.jpeg" />
+    <None Remove="Images\EleikoOlympicWeightliftingBar.jpg" />
+    <None Remove="Images\EverlastPowerlockGloves.jpg" />
+    <None Remove="Images\FinisAgilityPaddles.jpeg" />
+    <None Remove="Images\FischerRC4TheCurvSkis.jpg" />
+    <None Remove="Images\GiroMonacoGloves.jpg" />
+    <None Remove="Images\HeadSpeedTennisBalls.jpg" />
+    <None Remove="Images\image.png" />
+    <None Remove="Images\Inesis100GolfBalls.jpg" />
+    <None Remove="Images\Inesis500Driver.jpg" />
+    <None Remove="Images\KelmeDefenderShinguards.jpg" />
+    <None Remove="Images\KipstaVolleyballNet.jpg" />
+    <None Remove="Images\Li-NingAdjustableDumbbells.jpg" />
+    <None Remove="Images\Li-NingG-ForceShuttlecocks.jpg" />
+    <None Remove="Images\Li-NingOlympicBar.jpg" />
+    <None Remove="Images\Li-NingYogaMat.jpg" />
+    <None Remove="Images\LouisvilleSluggerPrimeBat.jpg" />
+    <None Remove="Images\MammutAlpineClimbingRope.jpeg" />
+    <None Remove="Images\MammutAlpineDryRope.jpg" />
+    <None Remove="Images\MammutHikingPoles.jpg" />
+    <None Remove="Images\MammutRockProHook.jpg" />
+    <None Remove="Images\MammutSkywalkerHelmet.jpg" />
+    <None Remove="Images\MammutTopographicMap.jpg" />
+    <None Remove="Images\MammutWallClimbingHook.jpg" />
+    <None Remove="Images\MammutWallRiderHelmet.jfif" />
+    <None Remove="Images\MizunoProLimitedGlove.jpg" />
+    <None Remove="Images\MoltenBG5000Ball.jpg" />
+    <None Remove="Images\NikeEliteChampionshipBall.png" />
+    <None Remove="Images\NikeEliteProRim.jpg" />
+    <None Remove="Images\NikeFieldingGlove.jpg" />
+    <None Remove="Images\NikeOfficialLeagueBall.jpg" />
+    <None Remove="Images\NikeProBaseballBat.jpg" />
+    <None Remove="Images\OspreyAtmos65Backpack.jpg" />
+    <None Remove="Images\PetzlSiroccoHelmet.jpg" />
+    <None Remove="Images\PumaFutureMatchBall.jpg" />
+    <None Remove="Images\RawlingsOfficialMLBBall.jpg" />
+    <None Remove="Images\ReebokYogaMat.jpg" />
+    <None Remove="Images\RingsideEliteHeadgear.jpg" />
+    <None Remove="Images\RossignolHeroElitePoles.jpg" />
+    <None Remove="Images\SalomonSMaxHelmet.jpg" />
+    <None Remove="Images\SilvaRangerCompass.jpg" />
+    <None Remove="Images\SpaldingNBAOfficialBall.jpg" />
+    <None Remove="Images\SpecializedS-WorksHelmet.jpg" />
+    <None Remove="Images\SpeedoFastskinCap.jpg" />
+    <None Remove="Images\SwixCompetitionBarbell.png" />
+    <None Remove="Images\SwixTrack&amp;FieldWatch.jpg" />
+    <None Remove="Images\TaylorMadeSIM2Driver.jpg" />
+    <None Remove="Images\TechnoGymSelectionDumbbell.jpg" />
+    <None Remove="Images\TitleistProV1xBalls.jpg" />
+    <None Remove="Images\TrekEmondaSLBike.jpg" />
+    <None Remove="Images\UmbroSpecialiGloves.jpeg" />
+    <None Remove="Images\VenumGiant3.0Gloves.jpeg" />
+    <None Remove="Images\VictorAuraspeed90K.jpg" />
+    <None Remove="Images\VictorBrave12Racquet.jpg" />
+    <None Remove="Images\VictorGoldShuttlecocks.jpg" />
+    <None Remove="Images\VictorTournamentNet.jpg" />
+    <None Remove="Images\WilsonEvolutionBasketball.jfif" />
+    <None Remove="Images\YonexAstrox99Racquet.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\2XUCompetitionCap.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\2XUEliteGoggles.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\2XUProFins.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\AdidasChampionsLeagueProBall.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\AdidasCompetitionHeadgear.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\AdidasPredatorGloves.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\AdidasProBoxingGloves.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\AdidasXProShinguards.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\ArcteryxAll-MountainHelmet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\ArcteryxFreerideGloves.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\ArcteryxProSnowboard.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\ArcteryxTriathlonBike.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\ArenaPowerglassProGoggles.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\ArtengoTennisNet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\ArtengoTR990Racquet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\AsicsRunningProGPSWatch.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\AsicsSpeedWalkerPoles.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\AtomicBacklandSkis.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\AtomicCarbonPoles.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\AtomicFreerideHelmet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\AtomicRaceHelmet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\AtomicRedsterS9Skis.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\AtomicTouringPoles.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\BabolatPureDriveRacquet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\BlackDiamondCamalotC4.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\BlackDiamondTrailProPoles.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\CallawayGolfStandBag.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\CraftAeroHelmet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\CraftCarbonRoadBike.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\CraftPerformanceGloves.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\DunlopFortClubNet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\EdelridMegaJulBelayDevice.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\EleikoOlympicWeightliftingBar.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\EverlastPowerlockGloves.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\FinisAgilityPaddles.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\FischerRC4TheCurvSkis.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\GiroMonacoGloves.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\HeadSpeedTennisBalls.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\image.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Inesis100GolfBalls.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Inesis500Driver.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\KelmeDefenderShinguards.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\KipstaVolleyballNet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Li-NingAdjustableDumbbells.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Li-NingG-ForceShuttlecocks.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Li-NingOlympicBar.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Li-NingYogaMat.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\LouisvilleSluggerPrimeBat.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\MammutAlpineClimbingRope.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\MammutAlpineDryRope.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\MammutHikingPoles.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\MammutRockProHook.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\MammutSkywalkerHelmet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\MammutTopographicMap.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\MammutWallClimbingHook.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\MizunoProLimitedGlove.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\MoltenBG5000Ball.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\NikeEliteChampionshipBall.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\NikeEliteProRim.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\NikeFieldingGlove.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\NikeOfficialLeagueBall.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\NikeProBaseballBat.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\OspreyAtmos65Backpack.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\PetzlSiroccoHelmet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\PumaFutureMatchBall.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\RawlingsOfficialMLBBall.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\ReebokYogaMat.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\RingsideEliteHeadgear.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\RossignolHeroElitePoles.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\SalomonSMaxHelmet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\SilvaRangerCompass.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\SpaldingNBAOfficialBall.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\SpecializedS-WorksHelmet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\SpeedoFastskinCap.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\SwixCompetitionBarbell.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\SwixTrack&amp;FieldWatch.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\TaylorMadeSIM2Driver.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\TechnoGymSelectionDumbbell.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\TitleistProV1xBalls.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\TrekEmondaSLBike.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\UmbroSpecialiGloves.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\VenumGiant3.0Gloves.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\VictorAuraspeed90K.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\VictorBrave12Racquet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\VictorGoldShuttlecocks.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\VictorTournamentNet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\YonexAstrox99Racquet.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>
