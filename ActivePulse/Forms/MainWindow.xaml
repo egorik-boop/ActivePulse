@@ -51,6 +51,8 @@
             <Setter Property="MaxWidth" Value="190"/>
         </Style>
 
+
+
         <!-- Стиль для кнопок -->
         <Style TargetType="Button" x:Key="ActionButton">
             <Setter Property="Background" Value="#FF555555"/>
@@ -129,29 +131,56 @@
                             <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                         </TextBox.InputBindings>
                     </TextBox>
+                    <TextBlock Text="Вид спорта" Style="{StaticResource SectionHeader}"/>
+
+                    <!-- Вид спорта -->
+                    <ComboBox x:Name="SportComboBox" 
+          DisplayMemberPath="SportName"
+          SelectionChanged="SportComboBox_SelectionChanged"/>
+
+                    <!-- Категория товаров -->
+                    <TextBlock Text="Категория товаров" 
+           Style="{StaticResource SectionHeader}" 
+           Margin="0,20,0,10"/>
+                    <ComboBox x:Name="CategoryComboBox" 
+          DisplayMemberPath="CategoryName"
+          SelectionChanged="CategoryComboBox_SelectionChanged"/>
                 </StackPanel>
+
+
             </ScrollViewer>
         </Border>
 
+
+
         <Button x:Name="CartButton" Content="Корзина" HorizontalAlignment="Right" VerticalAlignment="Top" 
-                Margin="0,154,76,0" Padding="10,5" Click="ViewCart_Click" Height="36" Width="134"
+                Margin="0,238,62,0" Padding="10,5" Click="ViewCart_Click" Height="36" Width="134"
                 Style="{StaticResource ActionButton}"/>
 
         <Button x:Name="ProfileButton" Content="Профиль" HorizontalAlignment="Right" VerticalAlignment="Top" 
-                Margin="0,213,76,0" Padding="10,5" Height="36" Width="134" Click="ProfileButton_Click"
+                Margin="0,297,62,0" Padding="10,5" Height="36" Width="134" Click="ProfileButton_Click"
                 Style="{StaticResource ActionButton}"/>
 
         <Button x:Name="FavouritesButton" Content="Избранное" HorizontalAlignment="Right" VerticalAlignment="Top" 
-        Margin="0,275,78,0" Padding="10,5" Height="36" Width="134" Click="FavouritesButton_Click"
+        Margin="0,359,64,0" Padding="10,5" Height="36" Width="134" Click="FavouritesButton_Click"
                 Style="{StaticResource ActionButton}"/>
 
-        <Button x:Name="UsersButton" Content="Управление пользователями" HorizontalAlignment="Center" VerticalAlignment="Top" 
-                Margin="0,570,0,0" Padding="10,5" Height="36" Width="193" Click="UsersButton_Click"
+        <Button x:Name="OrdersButton" Content="Заказы" HorizontalAlignment="Right" VerticalAlignment="Top" 
+Margin="0,415,64,0" Padding="10,5" Height="36" Width="134"
+        Style="{StaticResource ActionButton}" Click="OrdersButton_Click"/>
+
+        <Button x:Name="OrdersEditButton" Content="Управление заказами" HorizontalAlignment="Left" VerticalAlignment="Top" 
+        Margin="27,623,0,0" Padding="10,5" Height="36" Width="193"
+        Style="{StaticResource ActionButton}" Click="OrdersEditButton_Click"/>
+
+        <Button x:Name="UsersButton" Content="Управление пользователями" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Margin="27,570,0,0" Padding="10,5" Height="36" Width="193" Click="UsersButton_Click"
                 Style="{StaticResource ActionButton}"/>
 
-        <Button x:Name="ProductsButton" Content="Управление товарами" HorizontalAlignment="Center" VerticalAlignment="Top" 
-                Margin="0,619,0,0" Padding="10,5" Height="36" Width="193" Click="ProductsButton_Click"
+        <Button x:Name="ProductsButton" Content="Управление товарами" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Margin="27,518,0,0" Padding="10,5" Height="36" Width="193" Click="ProductsButton_Click"
                 Style="{StaticResource ActionButton}"/>
+
 
         <!-- Список товаров -->
         <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Padding="10">
@@ -166,7 +195,7 @@
                         <Border Style="{StaticResource ProductCard}" 
                                 ContextMenu="{StaticResource ProductContextMenu}"
                                 Tag="{Binding}">
-                            <StackPanel MouseLeftButtonDown="StackPanel_MouseLeftButtonDown">
+                            <StackPanel>
                                 <Border Background="#FF333333" Height="140" Width="180" CornerRadius="3">
                                     <Image Style="{StaticResource ProductImage}"
                                            Source="{Binding ImagePath, TargetNullValue='pack://application:,,,/ActivePulse;component/Images/image.png'}"/>
@@ -176,9 +205,11 @@
                                            Foreground="#FFD4A017" 
                                            FontSize="16"
                                            HorizontalAlignment="Center"/>
-                                <Button Content="Добавить в корзину" 
+
+                                <Button Content="Добавить в корзину"
                                         Style="{StaticResource ActionButton}"
-                                        Click="AddToCart_Click"
+                                        Click="AddToCartButton_Click"
+                                        Margin="0,5,0,0"
                                         Tag="{Binding ProductId}"/>
                                 <Button Style="{StaticResource FavoriteButton}"
                                         Click="AddToFavourites_Click"

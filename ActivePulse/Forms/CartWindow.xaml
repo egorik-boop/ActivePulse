@@ -178,6 +178,8 @@
                     <GridViewColumn Header="Сумма" 
                                    DisplayMemberBinding="{Binding Total, StringFormat='{}{0} руб.'}" 
                                    Width="120"/>
+
+                    <GridViewColumn Header="Размер" DisplayMemberBinding="{Binding Size}" Width="120"/>
                 </GridView>
             </ListView.View>
         </ListView>

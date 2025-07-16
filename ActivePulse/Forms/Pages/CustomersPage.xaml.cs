@@ -44,6 +44,8 @@ namespace ActivePulse.Forms.Pages
             {
                 _genders = _context.Genders.ToList();
                 GenderComboBox.ItemsSource = _genders;
+                GenderComboBox.DisplayMemberPath = "Gender1"; // Отображаемое свойство
+                GenderComboBox.SelectedValuePath = "GenderId"; // Значение для сохранения
             }
             catch (Exception ex)
             {
@@ -60,7 +62,7 @@ namespace ActivePulse.Forms.Pages
                     Firstname = FirstNameTextBox.Text,
                     Lastname = LastNameTextBox.Text,
                     Patronymic = PatronymicTextBox.Text,
-                    //BirthDate = BirthDatePicker.SelectedDate,
+                    BirthDate = DateOnly.FromDateTime(BirthDatePicker.SelectedDate ?? DateTime.Now),
                     Phone = PhoneTextBox.Text,
                     Gender = (GenderComboBox.SelectedItem as Gender)?.GenderId
                 };
@@ -86,7 +88,7 @@ namespace ActivePulse.Forms.Pages
                     selectedCustomer.Firstname = FirstNameTextBox.Text;
                     selectedCustomer.Lastname = LastNameTextBox.Text;
                     selectedCustomer.Patronymic = PatronymicTextBox.Text;
-                    //selectedCustomer.BirthDate = BirthDatePicker.SelectedDate;
+                    selectedCustomer.BirthDate = DateOnly.FromDateTime(BirthDatePicker.SelectedDate ?? DateTime.Now);
                     selectedCustomer.Phone = PhoneTextBox.Text;
                     selectedCustomer.Gender = (GenderComboBox.SelectedItem as Gender)?.GenderId;
 
@@ -138,20 +140,19 @@ namespace ActivePulse.Forms.Pages
 
         private void CustomersDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //if (CustomersDataGrid.SelectedItem is Customer selectedCustomer)
-            //{
-            //    FirstNameTextBox.Text = selectedCustomer.Firstname;
-            //    LastNameTextBox.Text = selectedCustomer.Lastname;
-            //    PatronymicTextBox.Text = selectedCustomer.Patronymic;
-            //    BirthDatePicker.SelectedDate = selectedCustomer.BirthDate;
-            //    PhoneTextBox.Text = selectedCustomer.Phone;
-
-            //    if (!string.IsNullOrEmpty(selectedCustomer.Gender))
-            //    {
-            //        GenderComboBox.SelectedItem = _genders.FirstOrDefault(g => g.GenderId == selectedCustomer.Gender);
-            //    }
-            //}
+            if (CustomersDataGrid.SelectedItem is Customer selectedCustomer)
+            {
+                FirstNameTextBox.Text = selectedCustomer.Firstname;
+                LastNameTextBox.Text = selectedCustomer.Lastname;
+                PatronymicTextBox.Text = selectedCustomer.Patronymic;
+                BirthDatePicker.SelectedDate = selectedCustomer.BirthDate?.ToDateTime(TimeOnly.MinValue);
+                PhoneTextBox.Text = selectedCustomer.Phone;
+                GenderComboBox.SelectedValue = selectedCustomer.Gender;
+            }
         }
+
+        // В методах AddButton_Click и UpdateButton_Click исправьте работу с BirthDate:
+        
 
         private void ClearFields()
         {

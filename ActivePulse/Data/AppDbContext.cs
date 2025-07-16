@@ -420,6 +420,9 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Price).HasColumnName("price");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.SupplyId).HasColumnName("supply_id");
+            entity.Property(e => e.ProductSize) // Добавьте это
+                .HasMaxLength(20)
+                .HasColumnName("product_size");
 
             entity.HasOne(d => d.Product).WithMany()
                 .HasForeignKey(d => d.ProductId)
@@ -441,9 +444,6 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("material");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
-            entity.Property(e => e.Size)
-                .HasMaxLength(10)
-                .HasColumnName("size_");
             entity.Property(e => e.Weight)
                 .HasPrecision(10, 2)
                 .HasColumnName("weight");
@@ -456,21 +456,24 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<ProductsInOrder>(entity =>
         {
+            // Указываем имя таблицы в БД
             entity.ToTable("products_in_order");
 
-            // Указываем составной первичный ключ
+            // Составной первичный ключ
             entity.HasKey(e => new { e.ProductId, e.OrderId });
 
             entity.Property(e => e.Count).HasColumnName("count_");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
 
+            // Правильная связь с Order
             entity.HasOne(d => d.Order)
-                .WithMany()
+                .WithMany(p => p.ProductsInOrders)
                 .HasForeignKey(d => d.OrderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("products_in_order_order_id_fkey");
 
+            // Связь с Product
             entity.HasOne(d => d.Product)
                 .WithMany()
                 .HasForeignKey(d => d.ProductId)

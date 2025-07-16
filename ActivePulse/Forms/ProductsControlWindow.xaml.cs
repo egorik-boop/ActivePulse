@@ -65,7 +65,6 @@ namespace ActivePulse.Forms
             ColorTextBox.IsEnabled = enabled;
             MaterialTextBox.IsEnabled = enabled;
             WeightTextBox.IsEnabled = enabled;
-            SizeTextBox.IsEnabled = enabled;
             GenderComboBox.IsEnabled = enabled;
 
             SaveButton.IsEnabled = enabled;
@@ -88,7 +87,6 @@ namespace ActivePulse.Forms
             ColorTextBox.Text = string.Empty;
             MaterialTextBox.Text = string.Empty;
             WeightTextBox.Text = string.Empty;
-            SizeTextBox.Text = string.Empty;
             GenderComboBox.SelectedItem = null;
         }
 
@@ -114,7 +112,6 @@ namespace ActivePulse.Forms
                 ColorTextBox.Text = spec.Color;
                 MaterialTextBox.Text = spec.Material;
                 WeightTextBox.Text = spec.Weight?.ToString();
-                SizeTextBox.Text = spec.Size;
 
                 // Установка значения пола
                 foreach (ComboBoxItem item in GenderComboBox.Items)
@@ -131,7 +128,6 @@ namespace ActivePulse.Forms
                 ColorTextBox.Text = string.Empty;
                 MaterialTextBox.Text = string.Empty;
                 WeightTextBox.Text = string.Empty;
-                SizeTextBox.Text = string.Empty;
                 GenderComboBox.SelectedItem = null;
             }
         }
@@ -172,7 +168,6 @@ namespace ActivePulse.Forms
                         ProductId = _currentProduct.ProductId,
                         Color = ColorTextBox.Text,
                         Material = MaterialTextBox.Text,
-                        Size = SizeTextBox.Text,
                         Gender = (GenderComboBox.SelectedItem as ComboBoxItem)?.Content?.ToString()
                     };
 
@@ -187,7 +182,6 @@ namespace ActivePulse.Forms
                 {
                     spec.Color = ColorTextBox.Text;
                     spec.Material = MaterialTextBox.Text;
-                    spec.Size = SizeTextBox.Text;
                     spec.Gender = (GenderComboBox.SelectedItem as ComboBoxItem)?.Content?.ToString();
 
                     if (decimal.TryParse(WeightTextBox.Text, out decimal weight))

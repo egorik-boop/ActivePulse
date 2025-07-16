@@ -73,30 +73,7 @@ namespace ActivePulse.Forms
             {
                 CustomMessageBox.Show("Ошибка", "Такой пользователь не найден");
             }
-            //        else
-            //        {
-            //            currentUser = userFromDb.GetUser(textBoxLogin.Text, textBoxPassword.Text);
-            //            if (currentUser != null)
-            //            {
-            //                MainForm mainForm = new MainForm();
-            //                mainForm.Show();
-            //                this.Hide();
-            //            }
-            //            else
-            //            {
-            //                counter++;
-            //                if (counter > 1)
-            //                {
-            //                    CaptchaForm captchaForm = new CaptchaForm();
-            //                    DialogResult captcha = captchaForm.ShowDialog();
-            //                    return;
-            //                }
-            //                else
-            //                {
-            //                    return;
-            //                }
-            //            }
-
+           
         }
     }
 }

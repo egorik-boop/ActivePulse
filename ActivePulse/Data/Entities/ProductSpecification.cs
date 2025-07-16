@@ -12,7 +12,6 @@ public class ProductSpecification
     public string Color { get; set; }
     public string Material { get; set; }
     public decimal? Weight { get; set; }
-    public string Size { get; set; }
     public string Gender { get; set; }
 
     [ForeignKey("ProductId")]

@@ -24,32 +24,14 @@ namespace ActivePulse.Forms
         public UsersControlWindow()
         {
             InitializeComponent();
-            CustomerFrame.Navigate(new CustomersPage());
+
+            // Инициализация фреймов
+            FrameClass.EmployeeFrame = EmployeeFrame;
+            FrameClass.CustomerFrame = CustomerFrame;
+
+            // Загрузка страниц
             EmployeeFrame.Navigate(new EmployeesPage());
-            LoadPages();
-        }
-        private void LoadPages()
-        {
-            // Загрузка страницы пользователей
             CustomerFrame.Navigate(new CustomersPage());
-
-            // Здесь вы можете аналогично загрузить другие страницы
-            // EmployeeFrame.Navigate(new EmployeesPage());
-            // CustomerFrame.Navigate(new CustomersPage());
         }
-
-        //public MainWindow()
-        //{
-        //    InitializeComponent();
-        //    dishesFrame.Navigate(new DishesPage());
-        //}
-
-        //private void Grid_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    FrameClass.dishesFrame = dishesFrame;
-        //    FrameClass.dishesFrame.Navigate(new Pages.DishesPage());
-
-        //    lbUsername.Content = AuthorizationWindow.currentUser.LastName + " " + AuthorizationWindow.currentUser.FirstName;
-        //}
     }
 }

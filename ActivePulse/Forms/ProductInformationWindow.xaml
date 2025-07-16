@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ActivePulse.Forms"
         mc:Ignorable="d"
         Title="Информация о товаре" 
-        Height="600" 
+        Height="757" 
         Width="800"
         WindowStartupLocation="CenterScreen"
         Background="#FF424242">
@@ -108,11 +108,34 @@
 
             <TextBlock x:Name="PriceTextBlock" Style="{StaticResource ProductPrice}"/>
 
+            <TextBlock Text="Размер:" Style="{StaticResource SectionHeader}"/>
+            <ComboBox x:Name="SizeComboBox" 
+              Margin="0,5,0,10"
+              Width="200"
+              HorizontalAlignment="Left" SelectionChanged="SizeComboBox_SelectionChanged"/>
+
+            <TextBlock Text="Наличие в магазинах:" Style="{StaticResource SectionHeader}"/>
+            <ListBox x:Name="StoreAvailabilityListBox" 
+         Margin="0,5,0,20"
+         Background="Transparent"
+         BorderThickness="0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="0,2">
+                            <TextBlock Text="{Binding StoreName}" Foreground="White" Width="200"/>
+                            <TextBlock Text="{Binding Quantity}" Foreground="White" Margin="10,0,0,0"/>
+                            <TextBlock Text="{Binding Status}" 
+                           Foreground="{Binding StatusColor}"
+                           Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
             <Button Content="Добавить в корзину" 
                     Style="{StaticResource ActionButton}"
                     Click="AddToCart_Click"
-                    Tag="{Binding ProductId}"/>
-
+                    Tag="{Binding ProductId}"
+                    x:Name="AddToCartButton"/>
             <Button Content="Добавить в избранное" 
                     Style="{StaticResource ActionButton}"
                     Click="AddToFavourites_Click"

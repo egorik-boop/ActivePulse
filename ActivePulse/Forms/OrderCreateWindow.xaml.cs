@@ -14,31 +14,40 @@ namespace ActivePulse.Forms
     public partial class OrderCreateWindow : Window
     {
         private readonly ObservableCollection<Cart> _cartItems;
-        private readonly decimal _deliveryCost = 300m; // Фиксированная стоимость доставки
+        private readonly decimal _deliveryCost = 300m;
         private List<Store> _stores;
         private List<DeliveryCategory> _deliveryCategories;
         private int _currentUserId;
+        private Dictionary<int, Dictionary<int, int>> _productAvailability;
 
         public OrderCreateWindow(ObservableCollection<Cart> cartItems)
         {
             InitializeComponent();
             _cartItems = cartItems ?? throw new ArgumentNullException(nameof(cartItems));
             _currentUserId = AuthorizationWindow.currentUser?.UserId ?? 0;
+            _productAvailability = new Dictionary<int, Dictionary<int, int>>();
 
-            InitializeData();
-            UpdateTotals();
+            Loaded += async (sender, e) =>
+            {
+                await InitializeDataAsync();
+                
+                UpdateTotals();
+            };
         }
 
-        private void InitializeData()
+        private async Task InitializeDataAsync()
         {
             using (var context = new AppDbContext())
             {
                 // Загружаем магазины
-                _stores = context.Stores.ToList();
+                _stores = await context.Stores.ToListAsync();
                 StoreComboBox.ItemsSource = _stores;
 
                 // Загружаем категории доставки
-                _deliveryCategories = context.DeliveryCategories.ToList();
+                _deliveryCategories = await context.DeliveryCategories.ToListAsync();
+
+                // Загружаем доступность товаров для всех магазинов
+                await LoadProductAvailability();
             }
 
             // Устанавливаем значения по умолчанию
@@ -52,6 +61,98 @@ namespace ActivePulse.Forms
             }
         }
 
+        private async Task LoadProductAvailability()
+        {
+            using (var context = new AppDbContext())
+            {
+                foreach (var store in _stores)
+                {
+                    var availability = new Dictionary<int, int>();
+
+                    foreach (var item in _cartItems)
+                    {
+                        using (var cmd = context.Database.GetDbConnection().CreateCommand())
+                        {
+                            cmd.CommandText = @"
+                            SELECT current_stock 
+                            FROM public.get_product_availability_by_store(@p_product_id) 
+                            WHERE store_id = @p_store_id";
+
+                            cmd.Parameters.Add(new NpgsqlParameter("@p_product_id", item.ProductId));
+                            cmd.Parameters.Add(new NpgsqlParameter("@p_store_id", store.StoreId));
+
+                            if (cmd.Connection.State != System.Data.ConnectionState.Open)
+                                await cmd.Connection.OpenAsync();
+
+                            var result = await cmd.ExecuteScalarAsync();
+                            int currentStock = result != null ? Convert.ToInt32(result) : 0;
+
+                            availability[item.ProductId] = currentStock;
+                        }
+                    }
+
+                    _productAvailability[store.StoreId] = availability;
+                }
+            }
+        }
+
+        
+
+        private void UpdateSubmitButtonState()
+        {
+            if (PickupRadio.IsChecked == true && StoreComboBox.SelectedItem is Store selectedStore)
+            {
+                var storeAvailability = _productAvailability[selectedStore.StoreId];
+                bool allAvailable = _cartItems.All(item =>
+                    storeAvailability.TryGetValue(item.ProductId, out var quantity) &&
+                    quantity >= item.Quantity);
+
+                SubmitButton.IsEnabled = allAvailable;
+
+                if (!allAvailable)
+                {
+                    var unavailableItems = _cartItems
+                        .Where(item => !storeAvailability.TryGetValue(item.ProductId, out var quantity) ||
+                                      quantity < item.Quantity)
+                        .Select(item => $"{item.ProductName} (не хватает {item.Quantity - (storeAvailability.TryGetValue(item.ProductId, out var q) ? q : 0)} шт.)");
+
+                    TotalTextBlock.Text = $"Товары: {_cartItems.Sum(item => item.Total)} руб.";
+                    DeliveryCostTextBlock.Text = "Самовывоз (не все товары доступны в выбранном магазине)";
+                    FinalTotalTextBlock.Text = $"Недоступно: {string.Join(", ", unavailableItems)}";
+                }
+            }
+            else
+            {
+                SubmitButton.IsEnabled = true;
+            }
+        }
+
+        private void StoreComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateSubmitButtonState();
+            UpdateTotals();
+            UpdateAvailabilityWarning();
+        }
+
+        private void DeliveryType_Checked(object sender, RoutedEventArgs e)
+        {
+            if (PickupRadio.IsChecked == true)
+            {
+                PickupPanel.Visibility = Visibility.Visible;
+                DeliveryPanel.Visibility = Visibility.Collapsed;
+                UpdateSubmitButtonState();
+                UpdateAvailabilityWarning(); // Добавьте этот вызов
+            }
+            else if (DeliveryRadio.IsChecked == true)
+            {
+                PickupPanel.Visibility = Visibility.Collapsed;
+                DeliveryPanel.Visibility = Visibility.Visible;
+                SubmitButton.IsEnabled = true;
+                AvailabilityWarningTextBlock.Visibility = Visibility.Collapsed; // Скрываем предупреждение при доставке
+            }
+
+            UpdateTotals();
+        }
         private void UpdateTotals()
         {
             decimal subtotal = _cartItems.Sum(item => item.Total);
@@ -63,30 +164,11 @@ namespace ActivePulse.Forms
             FinalTotalTextBlock.Text = $"Итого к оплате: {total} руб.";
         }
 
-        private void DeliveryType_Checked(object sender, RoutedEventArgs e)
-        {
-            if (PickupRadio.IsChecked == true)
-            {
-                PickupPanel.Visibility = Visibility.Visible;
-                DeliveryPanel.Visibility = Visibility.Collapsed;
-            }
-            else if (DeliveryRadio.IsChecked == true)
-            {
-                PickupPanel.Visibility = Visibility.Collapsed;
-                DeliveryPanel.Visibility = Visibility.Visible;
-            }
-
-            UpdateTotals();
-        }
+        
 
         private void PaymentType_Checked(object sender, RoutedEventArgs e)
         {
             CardPanel.Visibility = CardRadio.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        private void StoreComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // Можно добавить логику проверки наличия товаров в выбранном магазине
         }
 
         private async void SubmitButton_Click(object sender, RoutedEventArgs e)
@@ -111,13 +193,12 @@ namespace ActivePulse.Forms
                             {
                                 foreach (var item in _cartItems)
                                 {
-                                    // Создаем и настраиваем команду
                                     using (var cmd = context.Database.GetDbConnection().CreateCommand())
                                     {
                                         cmd.CommandText = @"
-                                    SELECT current_stock 
-                                    FROM public.get_product_availability_by_store(@p_product_id) 
-                                    WHERE store_id = @p_store_id";
+                                SELECT current_stock 
+                                FROM public.get_product_availability_by_store(@p_product_id) 
+                                WHERE store_id = @p_store_id";
 
                                         cmd.Parameters.Add(new NpgsqlParameter("@p_product_id", item.ProductId));
                                         cmd.Parameters.Add(new NpgsqlParameter("@p_store_id", storeId.Value));
@@ -137,19 +218,65 @@ namespace ActivePulse.Forms
                                 }
                             }
 
-                            // Создание заказа (остальной код без изменений)
+                            // Создание заказа
                             var order = new Order
                             {
-                                    CustomerId = _currentUserId,
-                                    EmployeeId = 1,
-                                    StoreId = storeId ?? 1,
-                                    Price = _cartItems.Sum(item => item.Total),
-                                    PaymentMethod = CashRadio.IsChecked == true ? 1 : 2,
-                                    OrderStatus = 1,
-                                    OrderDate = DateOnly.FromDateTime(DateTime.Now)
+                                CustomerId = _currentUserId,
+                                EmployeeId = 1, // Здесь можно указать конкретного сотрудника или получить из системы
+                                StoreId = storeId ?? 1, // Если доставка, используем магазин по умолчанию
+                                Price = _cartItems.Sum(item => item.Total),
+                                PaymentMethod = CashRadio.IsChecked == true ? 1 : 2, // 1 - наличные, 2 - карта
+                                OrderStatus = 1, // 1 - новый заказ
+                                OrderDate = DateOnly.FromDateTime(DateTime.Now)
                             };
 
+                            // Добавляем заказ в контекст
+                            context.Orders.Add(order);
+                            await context.SaveChangesAsync(); // Сохраняем, чтобы получить OrderId
+
+                            // Добавляем товары в заказ
+                            foreach (var item in _cartItems)
+                            {
+                                var productInOrder = new ProductsInOrder
+                                {
+                                    OrderId = order.OrderId,
+                                    ProductId = item.ProductId,
+                                    Count = item.Quantity,
+                                };
+                                context.ProductsInOrders.Add(productInOrder);
+                            }
+
+                            // Если это доставка, добавляем запись о доставке
+                            if (DeliveryRadio.IsChecked == true)
+                            {
+                                var delivery = new Delivery
+                                {
+                                    DeliveryDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)), // Доставка на следующий день
+                                    OrderId = order.OrderId,
+                                    DeliveryCategoryId = 1, // Категория доставки по умолчанию
+                                    Address = AddressTextBox.Text
+                                };
+                                context.Deliveries.Add(delivery);
+                            }
+
+                            // Если оплата картой, сохраняем данные карты
+                            if (CardRadio.IsChecked == true)
+                            {
+                                var cardData = new CardData
+                                {
+                                    OrderId = order.OrderId,
+                                    CardNumber = CardNumberTextBox.Text,
+                                    CardOwner = CardHolderTextBox.Text,
+                                    CardPeriod = DateOnly.FromDateTime(CardExpiryDatePicker.SelectedDate.Value),
+                                    Cvv = CardCvvTextBox.Text
+                                };
+                                context.CardData.Add(cardData);
+                            }
+
+                            // Сохраняем все изменения
+                            await context.SaveChangesAsync();
                             await transaction.CommitAsync();
+
                             CustomMessageBox.Show("Спасибо за заказ!", "Заказ успешно оформлен!");
                             this.Close();
                         }
@@ -225,6 +352,32 @@ namespace ActivePulse.Forms
             }
 
             return true;
+        }
+        private void UpdateAvailabilityWarning()
+        {
+            if (PickupRadio.IsChecked == true && StoreComboBox.SelectedItem is Store selectedStore)
+            {
+                var storeAvailability = _productAvailability[selectedStore.StoreId];
+                var unavailableItems = _cartItems
+                    .Where(item => !storeAvailability.TryGetValue(item.ProductId, out var quantity) ||
+                                  quantity < item.Quantity)
+                    .Select(item => $"{item.ProductName} (размер: {item.Size}), не хватает {item.Quantity - (storeAvailability.TryGetValue(item.ProductId, out var q) ? q : 0)} шт.")
+                    .ToList();
+
+                if (unavailableItems.Any())
+                {
+                    AvailabilityWarningTextBlock.Text = $"Внимание: в магазине '{selectedStore.StoreName}' отсутствуют:\n{string.Join("\n", unavailableItems)}";
+                    AvailabilityWarningTextBlock.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    AvailabilityWarningTextBlock.Visibility = Visibility.Collapsed;
+                }
+            }
+            else
+            {
+                AvailabilityWarningTextBlock.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

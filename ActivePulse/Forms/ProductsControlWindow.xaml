@@ -132,11 +132,11 @@
                         <TextBox x:Name="ProductNameTextBox" Style="{StaticResource FormTextBox}"/>
 
                         <TextBlock Text="Производитель:" Style="{StaticResource FormLabel}"/>
-                        <ComboBox x:Name="ManufacturerComboBox" Style="{StaticResource FormComboBox}" 
+                        <ComboBox x:Name="ManufacturerComboBox" 
                                   DisplayMemberPath="ManufacturerName"/>
 
                         <TextBlock Text="Категория:" Style="{StaticResource FormLabel}"/>
-                        <ComboBox x:Name="CategoryComboBox" Style="{StaticResource FormComboBox}" 
+                        <ComboBox x:Name="CategoryComboBox" 
                                   DisplayMemberPath="CategoryName"/>
 
                         <TextBlock Text="Срок гарантии (мес):" Style="{StaticResource FormLabel}"/>
@@ -154,11 +154,8 @@
                                 <TextBlock Text="Вес (кг):" Style="{StaticResource FormLabel}"/>
                                 <TextBox x:Name="WeightTextBox" Style="{StaticResource FormTextBox}"/>
 
-                                <TextBlock Text="Размер:" Style="{StaticResource FormLabel}"/>
-                                <TextBox x:Name="SizeTextBox" Style="{StaticResource FormTextBox}"/>
-
                                 <TextBlock Text="Пол:" Style="{StaticResource FormLabel}"/>
-                                <ComboBox x:Name="GenderComboBox" Style="{StaticResource FormComboBox}">
+                                <ComboBox x:Name="GenderComboBox">
                                     <ComboBoxItem Content="М"/>
                                     <ComboBoxItem Content="Ж"/>
                                 </ComboBox>

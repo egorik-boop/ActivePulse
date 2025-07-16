@@ -28,7 +28,7 @@
                 <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" Width="*"/>
                 <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDate, StringFormat={}{0:dd.MM.yyyy}}" Width="Auto"/>
                 <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="Auto"/>
-                <DataGridTextColumn Header="Пол" Binding="{Binding GenderNavigation.Gender}" Width="Auto"/>
+                <DataGridTextColumn Header="Пол" Binding="{Binding GenderNavigation.Gender1}" Width="Auto"/>
             </DataGrid.Columns>
         </DataGrid>
 

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ActivePulse.Entities;
 
 public partial class Order
 {
+    [Key]
     public int OrderId { get; set; }
 
     public int CustomerId { get; set; }
@@ -32,4 +34,6 @@ public partial class Order
     public virtual PaymentMethod PaymentMethodNavigation { get; set; } = null!;
 
     public virtual Store Store { get; set; } = null!;
+
+    public virtual ICollection<ProductsInOrder> ProductsInOrders { get; set; } = new List<ProductsInOrder>();
 }

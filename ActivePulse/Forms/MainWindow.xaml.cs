@@ -18,6 +18,8 @@ namespace ActivePulse.Forms
         private ObservableCollection<Favourite> _favourites = new ObservableCollection<Favourite>();
         private List<Product> products;
         private List<Product> filteredProducts;
+        private List<Sport> sports;
+        private List<ProductCategory> categories;
         User currentUser = new User();
 
         public MainWindow(int currentUser_id)
@@ -26,6 +28,8 @@ namespace ActivePulse.Forms
             currentUser = db.Users.FirstOrDefault(u => u.UserId == currentUser_id);
             InitializeComponent();
             LoadProducts();
+            LoadSportsAndCategories(); // Добавлен вызов
+            ApplyFilters();
         }
 
 
@@ -53,18 +57,126 @@ namespace ActivePulse.Forms
             }
         }
 
+        private void LoadSportsAndCategories()
+        {
+            try
+            {
+                // Загрузка видов спорта с добавлением "Все"
+                sports = db.Sports.ToList();
+                sports.Insert(0, new Sport { SportId = -1, SportName = "Все" }); // Добавляем вариант "Все"
+                SportComboBox.ItemsSource = sports;
+                SportComboBox.SelectedIndex = 0; // Выбираем "Все" по умолчанию
+
+                // Загрузка всех категорий
+                categories = db.ProductCategories.Include(pc => pc.Sport).ToList();
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.Show("Ошибка", $"Ошибка загрузки фильтров: {ex.Message}");
+            }
+        }
+
+        private void SportComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (SportComboBox.SelectedItem is Sport selectedSport)
+            {
+                if (selectedSport.SportId == -1) // Если выбрано "Все"
+                {
+                    // Показываем все категории
+                    CategoryComboBox.ItemsSource = categories;
+                }
+                else
+                {
+                    // Фильтрация категорий по выбранному виду спорта
+                    CategoryComboBox.ItemsSource = categories
+                        .Where(c => c.SportId == selectedSport.SportId)
+                        .ToList();
+                }
+            }
+            else
+            {
+                CategoryComboBox.ItemsSource = null;
+            }
+            ApplyFilters();
+        }
+
+        private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        private void ApplyFilters()
+        {
+            IQueryable<Product> query = db.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.Manufacturer)
+                .Include(p => p.CategoryNameNavigation)
+                .AsQueryable();
+
+            // Фильтр по виду спорта (если выбрано не "Все")
+            if (SportComboBox.SelectedItem is Sport selectedSport && selectedSport.SportId != -1)
+            {
+                query = query.Where(p => p.CategoryNameNavigation.SportId == selectedSport.SportId);
+            }
+
+            // Фильтр по категории
+            if (CategoryComboBox.SelectedItem is ProductCategory selectedCategory)
+            {
+                query = query.Where(p => p.CategoryName == selectedCategory.CategoryId);
+            }
+
+            // Фильтр по поисковой строке
+            string searchText = SearchTextBox.Text.ToLower();
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                query = query.Where(p =>
+                    p.ProductName.ToLower().Contains(searchText) ||
+                    (p.Manufacturer != null && p.Manufacturer.ManufacturerName.ToLower().Contains(searchText)) ||
+                    (p.CategoryNameNavigation != null && p.CategoryNameNavigation.CategoryName.ToLower().Contains(searchText))
+                );
+            }
+
+            // Группировка и преобразование
+            var displayProducts = query
+                .AsEnumerable()
+                .GroupBy(p => p.ProductName)
+                .Select(g => g.First())
+                .Select(p => new
+                {
+                    p.ProductId,
+                    p.ProductName,
+                    ManufacturerName = p.Manufacturer?.ManufacturerName ?? "Не указан",
+                    CategoryName = p.CategoryNameNavigation?.CategoryName ?? "Не указана",
+                    ImagePath = p.ProductImages.FirstOrDefault() != null ?
+                        "pack://application:,,," + p.ProductImages.First().Description :
+                        "/Images/image.png",
+                    Price = db.ProductInSupplies
+                            .Where(ps => ps.ProductId == p.ProductId)
+                            .OrderBy(ps => ps.Price)
+                            .FirstOrDefault()?.Price ?? 0
+                })
+                .ToList();
+
+            ProductsItemsControl.ItemsSource = displayProducts;
+        }
         private void LoadProducts()
         {
             try
             {
                 products = db.Products
                     .Include(p => p.ProductImages)
-                    .Include(p => p.Manufacturer)  // Добавляем загрузку производителя
-                    .Include(p => p.CategoryNameNavigation)  // Добавляем загрузку категории
+                    .Include(p => p.Manufacturer)
+                    .Include(p => p.CategoryNameNavigation)
+                    .ToList();
+
+                // Группируем товары по названию и выбираем первый из каждой группы
+                var uniqueProducts = products
+                    .GroupBy(p => p.ProductName)
+                    .Select(g => g.First())
                     .ToList();
 
                 // Создаем анонимный тип для отображения
-                var displayProducts = products.Select(p => new
+                var displayProducts = uniqueProducts.Select(p => new
                 {
                     p.ProductId,
                     p.ProductName,
@@ -87,29 +199,43 @@ namespace ActivePulse.Forms
             }
         }
 
-        private void AddToCart_Click(object sender, RoutedEventArgs e)
+        private void AddToCartButton_Click(object sender, RoutedEventArgs e)
         {
             var button = (Button)sender;
-            dynamic product = button.DataContext;
+            int productId = (int)button.Tag;
+            OpenProductInformationWindow(productId);
+        }
 
-            var existingItem = _cart.FirstOrDefault(item => item.ProductId == product.ProductId);
-            if (existingItem != null)
+        private void OpenProductInformationWindow(int productId)
+        {
+            try
             {
-                existingItem.Quantity++;
-            }
-            else
-            {
-                _cart.Add(new Cart
+                var product = db.Products
+                    .Include(p => p.Manufacturer)
+                    .Include(p => p.ProductImages)
+                    .FirstOrDefault(p => p.ProductId == productId);
+
+                if (product != null)
                 {
-                    ProductId = product.ProductId,
-                    ProductName = product.ProductName,
-                    ImagePath = product.ImagePath,
-                    Price = product.Price,
-                    Quantity = 1
-                });
-            }
+                    decimal price = db.ProductInSupplies
+                        .Where(ps => ps.ProductId == productId)
+                        .OrderBy(ps => ps.Price)
+                        .FirstOrDefault()?.Price ?? 0;
 
-            CustomMessageBox.Show("Товар в корзине!", $"\"{product.ProductName}\" добавлен в корзину!");
+                    var specs = db.ProductSpecifications
+                        .FirstOrDefault(ps => ps.ProductId == productId);
+
+                    var window = new ProductInformationWindow(product, price, _cart, _favourites, specs)
+                    {
+                        Owner = this
+                    };
+                    window.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.Show("Ошибка", ex.Message);
+            }
         }
 
         private void ViewCart_Click(object sender, RoutedEventArgs e)
@@ -124,7 +250,7 @@ namespace ActivePulse.Forms
 
             if (string.IsNullOrWhiteSpace(searchText))
             {
-                // Возвращаем все продукты
+
                 var displayProducts = products.Select(p => new
                 {
                     p.ProductId,
@@ -144,14 +270,14 @@ namespace ActivePulse.Forms
                 return;
             }
 
-            // Фильтруем продукты
+
             filteredProducts = products.Where(p =>
                 p.ProductName.ToLower().Contains(searchText) ||
                 (p.Manufacturer != null && p.Manufacturer.ManufacturerName.ToLower().Contains(searchText)) ||
                 (p.CategoryNameNavigation != null && p.CategoryNameNavigation.CategoryName.ToLower().Contains(searchText))
             ).ToList();
 
-            // Создаем анонимный тип для отображения отфильтрованных продуктов
+
             var filteredDisplayProducts = filteredProducts.Select(p => new
             {
                 p.ProductId,
@@ -168,6 +294,7 @@ namespace ActivePulse.Forms
             }).ToList();
 
             ProductsItemsControl.ItemsSource = filteredDisplayProducts;
+
         }
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
@@ -176,10 +303,7 @@ namespace ActivePulse.Forms
             editProfileWindow.Show();
         }
 
-        private void StackPanel_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            this.Close();
-        }
+        
 
         private void UsersButton_Click(object sender, RoutedEventArgs e)
         {
@@ -208,11 +332,11 @@ namespace ActivePulse.Forms
             {
                 try
                 {
-                    // Получаем ProductId из DataContext
+
                     dynamic productDisplay = menuItem.DataContext;
                     int productId = productDisplay.ProductId;
 
-                    // Загружаем полную информацию о товаре
+
                     var product = db.Products
                         .Include(p => p.Manufacturer)
                         .Include(p => p.ProductImages)
@@ -220,17 +344,15 @@ namespace ActivePulse.Forms
 
                     if (product != null)
                     {
-                        // Получаем цену
                         decimal price = db.ProductInSupplies
                             .Where(ps => ps.ProductId == productId)
                             .OrderBy(ps => ps.Price)
                             .FirstOrDefault()?.Price ?? 0;
 
-                        // Получаем спецификации
                         var specs = db.ProductSpecifications
                             .FirstOrDefault(ps => ps.ProductId == productId);
 
-                        // Открываем окно
+
                         var window = new ProductInformationWindow(product, price, _cart, _favourites, specs)
                         {
                             Owner = this
@@ -243,6 +365,20 @@ namespace ActivePulse.Forms
                     CustomMessageBox.Show("Ошибка", ex.Message);
                 }
             }
+        }
+
+        private void OrdersButton_Click(object sender, RoutedEventArgs e)
+        {
+            var ordersWindow = new OrdersWindow(currentUser.UserId);
+            ordersWindow.Owner = this;
+            ordersWindow.ShowDialog();
+        }
+
+        private void OrdersEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            var editOrdersWindow = new EditOrdersWindow();
+            editOrdersWindow.Owner = this;
+            editOrdersWindow.ShowDialog();
         }
     }
 }

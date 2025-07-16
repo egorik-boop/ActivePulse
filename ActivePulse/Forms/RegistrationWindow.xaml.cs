@@ -52,54 +52,49 @@ namespace ActivePulse.Forms
                     PasswordTextBox.Password.Length == 0 ||
                     ConfirmPasswordTextBox.Password.Length == 0)
                 {
-                    MessageBox.Show("Пожалуйста, заполните все поля", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CustomMessageBox.Show("Пожалуйста, заполните все поля", "Ошибка");
                     return;
                 }
 
-                // Проверка совпадения паролей
                 if (PasswordTextBox.Password != ConfirmPasswordTextBox.Password)
                 {
-                    MessageBox.Show("Пароли не совпадают", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CustomMessageBox.Show("Пароли не совпадают", "Ошибка");
                     return;
                 }
 
-                // Подключение к базе данных
+                
                 using (var db = new AppDbContext())
                 {
-                    // Проверка уникальности логина
                     if (await db.Users.AnyAsync(u => u.Login == LoginTextBox.Text))
                     {
-                        MessageBox.Show("Пользователь с таким логином уже существует", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        CustomMessageBox.Show("Пользователь с таким логином уже существует", "Ошибка");
                         return;
                     }
 
-                    // Проверка уникальности email
                     if (await db.Users.AnyAsync(u => u.Email == EmailTextBox.Text))
                     {
-                        MessageBox.Show("Пользователь с таким email уже существует", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        CustomMessageBox.Show("Пользователь с таким email уже существует", "Ошибка");
                         return;
                     }
 
-                    // Вызов хранимой процедуры
+                    
                     await db.Database.ExecuteSqlRawAsync(
                         "CALL public.register_customer_and_user({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8})",
                         FirstNameTextBox.Text,
                         LastNameTextBox.Text,
-                        null, // patronymic (может быть null)
-                        null, // birth_date (может быть null)
-                        null, // phone (может быть null)
-                        null, // gender (может быть null)
+                        null, 
+                        null, 
+                        null, 
+                        null, 
                         EmailTextBox.Text,
                         LoginTextBox.Text,
                         Verification.GetSHA512Hash(PasswordTextBox.Password)
                     );
 
-                    // Отправка письма с данными для входа
                     SendMessage(EmailTextBox.Text, LoginTextBox.Text, PasswordTextBox.Password);
 
                     CustomMessageBox.Show("Успех", "Регистрация успешно завершена! Данные для входа отправлены на вашу почту.");
 
-                    // Открываем окно авторизации
                     authorizationWindow = new AuthorizationWindow(LoginTextBox.Text, PasswordTextBox.Password);
                     authorizationWindow.Show();
                     this.Close();
@@ -107,7 +102,7 @@ namespace ActivePulse.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при регистрации: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show($"Ошибка при регистрации: {ex.Message}", "Ошибка");
             }
         }
 
